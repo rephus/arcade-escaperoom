@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glitch override</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet"/>
+    <link href="./countdown.css" rel="stylesheet"/>
+
+    <style>
+    
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            overflow: hidden; /* Prevent scrolling */
+            background-color: green; 
+
+        }
+        #override-input {
+            display: flex; 
+        }
+        .override {
+            position: relative;
+            top: -50px; 
+            left: 50%;
+            color: orange;  
+            font-size: large; 
+            text-align: center; 
+
+        }
+        .input {
+            width: 50px; 
+            height: 50px; 
+            border-radius: 10%;
+            background-color: white; 
+            margin-left: 10px; 
+            border: 2px solid black; 
+            font-size: 50px;
+            text-align: center;
+        }
+
+        .wrong {
+            border: 2px solid red; 
+        }
+
+        img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            object-fit: cover;
+            z-index: -1;
+        }
+    </style>
+</head>
+<body>
+    <div id="countdown">00:00:00</div>
+    <div id="override-input">
+        
+    </div>
+
+    <img id='glitch' src="./youtube-video-gif.gif" alt="Background Image"/>
+
+    <audio id="myAudio">
+        <source src="./final_fantasy_fanfare.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="deactivation">
+        <source src="./tts_deactivation_initiated.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="win">
+        <source src="./tts/win.mp3" type="audio/mpeg">
+    </audio>
+    <script>
+        // Play audio 
+        const audio = new Audio('./final_fantasy_fanfare.mp3');
+        audio.play();
+
+        const validSequence = "L93VF"
+        let sequence = ''
+        let isOverride = false; 
+        // Add an event listener for the keydown event
+        document.addEventListener('keydown', function(event) {
+            // Check if Ctrl, Shift, and O are pressed
+            if (event.ctrlKey && event.shiftKey && event.key === 'O') {
+                // Prevent the default action if needed
+                event.preventDefault();
+                isOverride = true; 
+                // Execute your code here
+                const deactivationAudio = document.getElementById('deactivation');
+                deactivationAudio.play()
+                console.log('Ctrl + Shift + O was pressed!');
+                const override = document.getElementById('override-input')
+                override.innerHTML = '<div class="override">Override mode</div>'
+                const input = `<div class='input' ></div>`;
+                for (let i = 0; i < validSequence.length; i++) {
+                    override.innerHTML += input
+                }
+                return 
+            } 
+            var inputs = document.querySelectorAll(".input");
+
+            if (isOverride) {
+                // Add input
+                console.log('input ', event.key)
+                sequence+=event.key
+
+                inputs.forEach(function(input, i) {
+                        console.log('i', i, sequence.length)
+                            if (i < sequence.length)  input.innerHTML = '*'
+                        });
+            }
+
+            if (sequence.length === validSequence.length) {
+
+
+                if (sequence.toLowerCase() === validSequence.toLowerCase()) {
+                    console.log('you won')
+                    document.getElementById('glitch').style.display = 'none'
+                    document.getElementById('override-input').style.display = 'none'
+
+                    const audio = document.getElementById('myAudio');
+                    audio.play()
+                    setTimeout(() => {
+                        const deactivationAudio = document.getElementById('win');
+                        deactivationAudio.play()
+                    }, 3000)
+                   
+                } else {
+                    sequence = ''
+                    console.log('invalid sequence ' + sequence + ' !== ' + validSequence);
+                    inputs.forEach(function(input) {
+                            input.innerHTML = ''
+                            input.classList.add("wrong");
+                        });
+                        setTimeout(() => {
+                            inputs.forEach(function(input) {
+                                input.classList.remove("wrong");
+                            });
+                        }, 300);
+                }
+            }
+                
+            });
+            
+    </script>
+        <script src="./countdown.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet"/>
+    <link href="./countdown.css" rel="stylesheet"/>
+
+        
+    <style>
+
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            overflow: hidden; /* Prevent scrolling */
+            background-color: green; 
+        }
+        img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            object-fit: cover;
+            z-index: -1;
+        }
+        .panel {
+            width: 200px; 
+            padding: 50px; 
+            background-color: white; 
+            border-radius: 5%;
+            border: 2px solid black; 
+        }
+        #clue {
+            display:none; 
+        }
+    </style>
+</head>
+<body>
+    <div id="countdown">00:00:00</div>
+
+    <div id="question" class="panel">
+        Super Mario World (Super nintendo): 
+
+        Find the code
+    </div>
+       <!-- solution in game: F -->
+
+
+    <img id='glitch' src="./youtube-video-gif.gif" alt="Background Image"/>
+
+            <script src="./countdown.js"></script>
+
+</body>
+</html>

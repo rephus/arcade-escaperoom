@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Autoplay Fullscreen Video</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            overflow: hidden; /* Prevent scrolling */
+        }
+
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .direction-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .action-buttons, .start-select-buttons {
+            display: flex;
+            gap: 20px;
+        }
+
+        button {
+            width: 15vw;
+            height: 15vw;
+            max-width: 100px;
+            max-height: 100px;
+            border-radius: 50%;
+            background-color: #000;
+            color: #fff;
+            border: none;
+            font-size: 5vw;
+            max-font-size: 20px;
+            cursor: pointer;
+        }
+
+        .valid {
+            background-color: green;
+        }
+
+        .wrong {
+            background-color: red;
+        }
+
+        img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            object-fit: cover;
+            z-index: -1;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="button-container">
+        <div class="direction-buttons">
+            <button>↑</button>
+        </div>
+        <div class="direction-buttons">
+            <button>←</button>
+            <button>→</button>
+        </div>
+        <div class="direction-buttons">
+            <button>↓</button>
+        </div>
+        <div class="action-buttons">
+            <button>A</button>
+            <button>B</button>
+        </div>
+        <div class="start-select-buttons">
+            <button>Start</button>
+            <button>Select</button>
+        </div>
+    </div>
+
+    <img src="./youtube-video-gif.gif" alt="Background Image"/>
+
+    <audio autoplay>
+        <source src="./glitch.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <script>
+        const validSequence = ['↑', '↑', '↓', '↓', '←', '→', '←', '→', 'B', 'A', 'Start'];
+        let sequence = [];
+
+        function myFunction(event) {
+            console.log("You clicked " + event.target.textContent);
+
+            sequence.push(event.target.textContent);
+            console.log('current sequence', sequence);
+
+            for (let i = 0; i < sequence.length; i++) {
+                if (sequence[i] !== validSequence[i]) {
+                    console.log('invalid sequence ' + sequence[i] + ' !== ' + validSequence[i]);
+                    buttons.forEach(function(button) {
+                        button.classList.add("wrong");
+                    });
+                    setTimeout(() => {
+                        buttons.forEach(function(button) {
+                            button.classList.remove("wrong");
+                        });
+                    }, 100);
+                    sequence = [];
+                    return false;
+                }
+            }
+
+            if (sequence.length === validSequence.length) {
+                console.log('You won!');
+                buttons.forEach(function(button) {
+                    button.classList.add("valid");
+                });
+                return;
+            }
+
+            event.target.classList.add("valid");
+            setTimeout(() => {
+                event.target.classList.remove("valid");
+            }, 100);
+        }
+
+        // Select all buttons
+        var buttons = document.querySelectorAll("button");
+
+        // Loop through each button and add the event listener
+        buttons.forEach(function(button) {
+            button.addEventListener("click", myFunction);
+        });
+    </script>
+</body>
+</html>
